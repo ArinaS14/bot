@@ -387,7 +387,7 @@ async def send_catalog(message: types.Message, state: FSMContext):
         report = (f"🗂 КЛИЕНТ СКАЧАЛ КАТАЛОГ\n\n"
                   f"👤 Имя: {user[0]}\n"
                   f"📞 Телефон: {user[1]}\n"
-                  f"🔗 Ссылка на тг: {username}")\n"
+                  f"🔗 Ссылка на тг: {username}\n"
                   f"🤝 Пришел от агента: {user[2]}"
         await bot.send_message(AGENT_CHAT_ID, report, parse_mode="Markdown")
     except Exception as e:
@@ -441,6 +441,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
 
 
