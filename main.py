@@ -14,7 +14,7 @@ from aiogram.types import (
 )
 from dotenv import load_dotenv
 
-# --- НАСТРОЙКИ ---
+# --- НАСТРОЙКИ ----
 load_dotenv()
 API_TOKEN = os.getenv('BOT_TOKEN')
 raw_chat_id = os.getenv('AGENT_CHAT_ID')
@@ -431,4 +431,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
