@@ -221,40 +221,47 @@ async def eval_4(message: types.Message, state: FSMContext):
     data = await state.get_data()
     photos = data.get("photos", [])
     
+    # Если пользователь прислал документ (фото без сжатия)
+    if message.document:
+        await message.answer("⚠️ Пожалуйста, отправьте фото **как изображение** (со сжатием). \n\n"
+                             "Фотографии «файлом» я принять не смогу. Попробуйте еще раз или нажмите '✅ Готово'.", 
+                             parse_mode="Markdown")
+        return
+
+    # Если пользователь прислал обычное фото
     if message.photo:
         photos.append(message.photo[-1].file_id)
         await state.update_data(photos=photos)
         return
 
+    # Логика завершения (кнопки)
     if message.text in ["✅ Готово", "🚫 Отправить без фото"]:
         user = get_user(message.from_user.id)
-        
-        # 1. Получаем никнейм через @
         username = f"@{message.from_user.username}" if message.from_user.username else "Скрыт"
         
-        # 2. Формируем текст отчета
         report = (
             f"📏 **ЗАПРОС НА ОЦЕНКУ КВАРТИРЫ**\n\n"
             f"👤 Клиент: {user[0]}\n"
             f"📞 Телефон: {user[1]}\n"
-            f"🔗 ТГ клиента: {username}\n" # Добавили никнейм
-            f"🤝 Пришел от агента: {user[2]}\n\n"
-            f"**Информация:**\n"
+            f"🔗 ТГ: {username}\n"
             f"📍 Район/ЖК: {data['city']}\n"
             f"📏 Параметры: {data['rooms']}"
         )
 
-        if photos:
-            # Для группы фото используем Markdown в первом элементе
-            media = [InputMediaPhoto(media=photos[0], caption=report, parse_mode="Markdown")]
-            for p in photos[1:10]: 
-                media.append(InputMediaPhoto(media=p))
-            await bot.send_media_group(AGENT_CHAT_ID, media)
-        else:
-            # Если фото нет, отправляем обычным сообщением
-            await bot.send_message(AGENT_CHAT_ID, report + "\n📸 (Без фото)", parse_mode="Markdown")
-
-        await message.answer("Заявка передана агенту! После оценки мы с вами свяжемся 😊", reply_markup=main_menu())
+        try:
+            if photos:
+                media = [InputMediaPhoto(media=photos[0], caption=report, parse_mode="Markdown")]
+                for p in photos[1:10]: 
+                    media.append(InputMediaPhoto(media=p))
+                await bot.send_media_group(AGENT_CHAT_ID, media)
+            else:
+                await bot.send_message(AGENT_CHAT_ID, report + "\n📸 (Без фото)", parse_mode="Markdown")
+            
+            await message.answer("Заявка передана агенту! 😊", reply_markup=main_menu())
+        except Exception as e:
+            print(f"Ошибка в оценке: {e}")
+            await message.answer("Произошла ошибка при отправке. Попробуйте позже.", reply_markup=main_menu())
+            
         await state.clear()
 
 # --- ОСТАЛЬНЫЕ РАЗДЕЛЫ (ТОЛЬКО ТЕКСТ) ---
@@ -375,9 +382,9 @@ async def send_catalog(message: types.Message, state: FSMContext):
         
         # Отчет агентам
         username = f"@{message.from_user.username}" if message.from_user.username else "Скрыт"
-        report = (f"📥 КЛИЕНТ СКАЧАЛ КАТАЛОГ\n"
+        report = (f"🗂 КЛИЕНТ СКАЧАЛ КАТАЛОГ\n\n"
                   f"👤 Имя: {user[0]}\n"
-                  f"📞 Телеон: {user[1]}\n"
+                  f"📞 Телефон: {user[1]}\n"
                   f"🔗 Ссылка на тг: {username}")
         await bot.send_message(AGENT_CHAT_ID, report, parse_mode="Markdown")
     except Exception as e:
@@ -431,6 +438,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
 
 
