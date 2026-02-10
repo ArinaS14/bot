@@ -24,7 +24,7 @@ IB_TAG = os.getenv('IB_TAG')
 
 CATALOG_FILE_ID = "BQACAgIAAxkDAAIEy2mKJ-fQgO3G4sgmDJt2kcuvMXhcAAKUlAACf8tQSMuHYMpCBk9-OgQ"
 
-DB_PATH = "/data/users.db" if os.path.exists("/data") else "users.db"
+DB_PATH = "data/users.db" if os.path.exists("data") else "users.db"
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
@@ -60,7 +60,7 @@ def get_user(user_id):
     cursor.execute('SELECT name, phone, referrer FROM users WHERE user_id = ?', (user_id,))
     return cursor.fetchone()
 
-# --- СОСТОЯНИЯ (FSM) ---
+# --- СОСТОЯНИЯ ---
 class Form(StatesGroup):
     reg_name = State()
     reg_phone = State()
@@ -127,7 +127,6 @@ async def start_cmd(message: types.Message, state: FSMContext):
     
     user = get_user(message.from_user.id)
     
-    # ВАШ ОРИГИНАЛЬНЫЙ ТЕКСТ
     welcome_text = (
         "✨ **Добро пожаловать в агентство недвижимости «Выбор Первых»!**\n\n"
         "Наша команда — проводник в мир недвижимости, мы берем все сложные процессы на себя.\n\n"
@@ -283,7 +282,7 @@ async def reg_phone_step(message: types.Message, state: FSMContext):
     referrer = data.get('referrer', 'Прямой заход')
     username = f"@{message.from_user.username}" if message.from_user.username else "Скрыт"
     
-    # Сохраняем в БД (убедитесь, что в init_db 5 колонок!)
+    # Сохраняем в БД
     save_user(
         message.from_user.id, 
         data['user_name'], 
@@ -372,7 +371,7 @@ async def send_catalog(message: types.Message, state: FSMContext):
 
     try:
         # Мгновенная отправка по file_id
-        await message.answer_document(document=CATALOG_FILE_ID, caption="🏠 Ваш каталог новостроек!")
+        await message.answer_document(document=CATALOG_FILE_ID, caption="🏠 Каталог новостроек от команды «Выбор Первых»!")
         
         # Отчет агентам
         username = f"@{message.from_user.username}" if message.from_user.username else "Скрыт"
@@ -432,3 +431,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
