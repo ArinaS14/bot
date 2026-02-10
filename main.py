@@ -359,7 +359,7 @@ async def mortgage_final(message: types.Message, state: FSMContext):
     
     # 3. В send_message указываем переменную 'report' (у вас была report_text)
     # И обязательно добавляем parse_mode="Markdown"
-    await bot.send_message(AGENT_CHAT_ID, report, parse_mode="Markdown")
+    await bot.send_message(AGENT_CHAT_ID, report)
     
     await message.answer("Заявка передана брокеру! После анализа мы с вами свяжемся 😊", reply_markup=main_menu())
     await state.clear()
@@ -431,5 +431,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
 
