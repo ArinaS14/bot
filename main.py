@@ -243,7 +243,9 @@ async def eval_4(message: types.Message, state: FSMContext):
             f"📏 **ЗАПРОС НА ОЦЕНКУ КВАРТИРЫ**\n\n"
             f"👤 Клиент: {user[0]}\n"
             f"📞 Телефон: {user[1]}\n"
-            f"🔗 ТГ: {username}\n"
+            f"🔗 Ссылка на тг: {username}\n"
+            f"🤝 Пришел от агента: {user[2]}\n\n"
+            f"Информация об объекте:\n"
             f"📍 Район/ЖК: {data['city']}\n"
             f"📏 Параметры: {data['rooms']}"
         )
@@ -385,7 +387,8 @@ async def send_catalog(message: types.Message, state: FSMContext):
         report = (f"🗂 КЛИЕНТ СКАЧАЛ КАТАЛОГ\n\n"
                   f"👤 Имя: {user[0]}\n"
                   f"📞 Телефон: {user[1]}\n"
-                  f"🔗 Ссылка на тг: {username}")
+                  f"🔗 Ссылка на тг: {username}")\n"
+                  f"🤝 Пришел от агента: {user[2]}"
         await bot.send_message(AGENT_CHAT_ID, report, parse_mode="Markdown")
     except Exception as e:
         print(f"Ошибка каталога: {e}")
@@ -438,6 +441,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
 
 
