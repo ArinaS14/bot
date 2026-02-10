@@ -259,7 +259,7 @@ async def eval_4(message: types.Message, state: FSMContext):
             else:
                 await bot.send_message(AGENT_CHAT_ID, report + "\n📸 (Без фото)", parse_mode="Markdown")
             
-            await message.answer("Заявка передана агенту! 😊", reply_markup=main_menu())
+            await message.answer("Заявка передана агенту😊 Мы свяжемся с вами в ближайшее время!", reply_markup=main_menu())
         except Exception as e:
             print(f"Ошибка в оценке: {e}")
             await message.answer("Произошла ошибка при отправке. Попробуйте позже.", reply_markup=main_menu())
@@ -441,6 +441,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\n🛑 Бот остановлен пользователем")
+
 
 
 
