@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 # --- НАСТРОЙКИ ---
 load_dotenv()
-TOKEN = os.getenv('BOT_TOKEN')
+API_TOKEN = os.getenv('BOT_TOKEN')
 raw_chat_id = os.getenv('AGENT_CHAT_ID')
 AGENT_CHAT_ID = int(raw_chat_id)
 HR_TAG = os.getenv('HR_TAG')
@@ -430,4 +430,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
+
         print("\n🛑 Бот остановлен пользователем")
