@@ -428,6 +428,11 @@ async def send_catalog(message: types.Message, state: FSMContext):
         print(f"Ошибка каталога: {e}")
         await message.answer("Каталог временно недоступен.")
 
+# --- ВРЕМЕННО: ПОЛУЧИТЬ FILE_ID ---
+@dp.message(F.document)
+async def get_file_id(message: types.Message):
+    await message.answer(message.document.file_id)
+
 # --- ФИНАЛЬНАЯ ЗАЩИТА (ОШИБКА ДЛЯ КАРТИНОК ТАМ, ГДЕ ИХ НЕ ЖДЕМ) ---
 @dp.message(F.photo | F.document | F.video | F.sticker)
 async def wrong_content_handler(message: types.Message):
