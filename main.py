@@ -22,7 +22,7 @@ AGENT_CHAT_ID = int(raw_chat_id)
 HR_TAG = os.getenv('HR_TAG')
 IB_TAG = os.getenv('IB_TAG')
 
-CATALOG_FILE_ID = "BQACAgIAAxkDAAIEy2mKJ-fQgO3G4sgmDJt2kcuvMXhcAAKUlAACf8tQSMuHYMpCBk9-OgQ"
+CATALOG_FILE_ID = "BQACAgIAAxkBAAIIaGm6mFu9LAXPpXAGg0lZ0q2GTawCAAKzlgACrYnQSRQFctBrMTUPOgQ"
 
 DB_PATH = "data/users.db" if os.path.exists("data") else "users.db"
 
